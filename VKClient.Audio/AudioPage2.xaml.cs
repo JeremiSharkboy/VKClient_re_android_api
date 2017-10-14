@@ -110,56 +110,73 @@ namespace VKClient.Audio
                 if (selectedItem == null)
                     return;
 
-                if (BGAudioPlayerWrapper.Instance.Track != null && selectedItem.UniqueId == BGAudioPlayerWrapper.Instance.Track.Tag)
-                {
-                    BGAudioPlayerWrapper.Instance.Pause();
-                }
-                else
-                {
-                    AudioObj a = new AudioObj();
-                    a.duration = selectedItem.duration.ToString();
-                    a.artist = selectedItem.artist;
-                    a.title = selectedItem.title;
-                    a.url = selectedItem.url;
-                    a.id = selectedItem.id;
-                    a.owner_id = selectedItem.owner_id;
-                    BGAudioPlayerWrapper.Instance.Track = AudioTrackHelper.CreateTrack(a);
-                    BGAudioPlayerWrapper.Instance.Play();
-
-
-
-
-
-
-                    //
-                    List<AudioObj> tracks = new List<AudioObj>();
-
-                    foreach ( AudioPageViewModel.Audios.AudioData2 adata in (base.DataContext as AudioPageViewModel).audios.items )
-                    {
-                        AudioObj o = new AudioObj();
-                        //AudioHeader ah = new AudioHeader(o);
-                        o.artist = adata.artist;
-                        o.duration = adata.duration.ToString();
-                        o.id = adata.id;
-                        o.owner_id = adata.owner_id;
-                        o.title = adata.title;
-                        o.url = adata.url;
-                        tracks.Add(o);
-                    }
-
-                    PlaylistManager.SetAudioAgentPlaylist(tracks, CurrentMediaSource.AudioSource);
-                    AudioHeader track = new AudioHeader(a);
-                    if (!track.TryAssignTrack())
-                        return;
-                    //if (need_navigate)
-                    //    Navigator.Current.NavigateToAudioPlayer(true);
-                    //else
-                    //    BGAudioPlayerWrapper.Instance.Play();
-                    //
-                }
-                int i = 0;
+                this.TrackAction(selectedItem);
             }
             longListSelector.SelectedItem = null;
+        }
+
+        private void TrackAction(AudioPageViewModel.Audios.AudioData2 item)
+        {
+            if (BGAudioPlayerWrapper.Instance.Track != null && item.UniqueId == BGAudioPlayerWrapper.Instance.Track.Tag)
+            {
+                BGAudioPlayerWrapper.Instance.Pause();
+            }
+            else
+            {
+                AudioObj a = new AudioObj();
+                a.duration = item.duration.ToString();
+                a.artist = item.artist;
+                a.title = item.title;
+                a.url = item.url;
+                a.id = item.id;
+                a.owner_id = item.owner_id;
+                BGAudioPlayerWrapper.Instance.Track = AudioTrackHelper.CreateTrack(a);
+                BGAudioPlayerWrapper.Instance.Play();
+
+
+
+
+
+
+                //
+                List<AudioObj> tracks = new List<AudioObj>();
+
+                foreach (AudioPageViewModel.Audios.AudioData2 adata in (base.DataContext as AudioPageViewModel).audios.items)
+                {
+                    AudioObj o = new AudioObj();
+                    //AudioHeader ah = new AudioHeader(o);
+                    o.artist = adata.artist;
+                    o.duration = adata.duration.ToString();
+                    o.id = adata.id;
+                    o.owner_id = adata.owner_id;
+                    o.title = adata.title;
+                    o.url = adata.url;
+                    tracks.Add(o);
+                }
+
+                PlaylistManager.SetAudioAgentPlaylist(tracks, CurrentMediaSource.AudioSource);
+                AudioHeader track = new AudioHeader(a);
+                if (!track.TryAssignTrack())
+                    return;
+                //if (need_navigate)
+                //    Navigator.Current.NavigateToAudioPlayer(true);
+                //else
+                //    BGAudioPlayerWrapper.Instance.Play();
+                //
+            }
+        }
+
+        private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ListBox box = sender as ListBox;
+            if (box != null)
+            {
+                AudioPageViewModel.Audios.AudioData2 selectedItem = box.SelectedItem as AudioPageViewModel.Audios.AudioData2;
+                if (selectedItem == null)
+                    return;
+
+                this.TrackAction(selectedItem);
+            }
         }
     }
 }

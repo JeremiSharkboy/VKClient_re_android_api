@@ -82,7 +82,7 @@
                     <TextBlock Grid.Column="1" Text="Show all" HorizontalAlignment="Right" Margin="20 0" FontWeight="SemiBold"/>
 
                 </Grid>
-                <ListBox MaxHeight="300" ItemsSource="{Binding audios}" ItemTemplate="{StaticResource TrackTemplate}">
+                <ListBox MaxHeight="300" ItemsSource="{Binding audios}" ItemTemplate="{StaticResource TrackTemplate}" SelectionChanged="ListBox_SelectionChanged">
 
                 </ListBox>
             </StackPanel>
