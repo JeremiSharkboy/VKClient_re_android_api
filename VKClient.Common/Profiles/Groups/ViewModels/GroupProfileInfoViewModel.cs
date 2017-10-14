@@ -232,8 +232,7 @@ namespace VKClient.Common.Profiles.Groups.ViewModels
                 inlinesCollection1.Add((Inline)run3);
                 InlinesCollection inlinesCollection3 = inlinesCollection1;
                 Run run5 = new Run();
-                FontFamily fontFamily2 = new FontFamily("Segoe WP Semibold");
-                ((TextElement)run5).FontFamily = fontFamily2;
+                run5.FontFamily = new FontFamily("Segoe WP Semibold");
                 string str4 = UIStringFormatterHelper.FormatForUI((long)this._group.friends.Count) + Convert.ToChar(160).ToString();
                 run5.Text = str4;
                 inlinesCollection3.Add((Inline)run5);
@@ -250,8 +249,9 @@ namespace VKClient.Common.Profiles.Groups.ViewModels
 
         protected override ProfileInfoFullViewModel GetFullInfoViewModel()
         {
-            return null;//todo:bug
-            //return (ProfileInfoFullViewModel) new GroupFullInfoViewModel(this._group);
+            GroupData g = new GroupData();
+            g.group = this._group;//todo:optimize
+            return (ProfileInfoFullViewModel) new GroupFullInfoViewModel(g);
         }
 
         public override void OpenWikiPage()

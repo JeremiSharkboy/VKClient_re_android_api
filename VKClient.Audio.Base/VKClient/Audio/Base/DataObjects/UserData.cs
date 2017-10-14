@@ -15,10 +15,7 @@ namespace VKClient.Audio.Base.DataObjects
         //public FriendStatus friend { get; set; }
         public int friend_status
         {
-            get
-            {
-                return this.user.friend_status;
-            }
+            get { return this.user.friend_status; }
         }
 
         public List<User> randomMutualFriends { get; set; }
@@ -60,10 +57,9 @@ namespace VKClient.Audio.Base.DataObjects
         {
             get
             {
-                User user = this.user;
-                if (user == null)
+                if (this.user == null)
                     return null;
-                return user.counters;
+                return this.user.counters;
             }
         }
 
@@ -77,7 +73,7 @@ namespace VKClient.Audio.Base.DataObjects
 
         public List<Video> videos { get; set; }
 
-        public List<Product> products { get; set; }
+        public VKList<Product> goods { get; set; }//public List<Product> products { get; set; }
 
         public bool isMarketMainAlbumEmpty
         {

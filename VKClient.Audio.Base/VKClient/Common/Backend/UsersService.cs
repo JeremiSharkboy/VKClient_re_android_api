@@ -461,6 +461,8 @@ namespace VKClient.Common.Backend
                 BackendResult<UserData, ResultCode> res = new BackendResult<UserData, ResultCode>();
                 res.ResultData = new UserData();
                 res.ResultData.user = ud.ResultData;
+                res.ResultData.gifts = ud.ResultData.gifts;
+                res.ResultData.photos = ud.ResultData.photos;
                 res.ResultCode = ResultCode.Succeeded;
                 callback(res);
             };
@@ -473,6 +475,7 @@ namespace VKClient.Common.Backend
                 string str1 = m.Groups[1].Value;
                 string str2 = m.Groups[2].Value;
                 jsonStr = jsonStr.Replace(str1, "\"status\":\"" + str2 + "\"");
+
                 VKRequestsDispatcher.GenericRoot<User> genericRoot = JsonConvert.DeserializeObject<VKRequestsDispatcher.GenericRoot<User>>(jsonStr);
                 return genericRoot.response;
             }), false, true, new CancellationToken?(), null);

@@ -162,7 +162,7 @@ namespace VKClient.Common.Profiles.Users.ViewModels
 
                     case FriendshipStatus.RequestReceived:
                         {
-                            return CommonResources.Profile_ReplyToRequest;
+                            return this._userData.user.IsFemale ? CommonResources.Profile_FollowingYou_Female : CommonResources.Profile_ReplyToRequest;
                         }
 
                     default:
@@ -253,7 +253,51 @@ namespace VKClient.Common.Profiles.Users.ViewModels
                         menuItemList.Add(menuItem6);
                         menuItemList.Add(menuItem8);
                         break;*/
-                        //todo:bug
+                        //todo:bug?
+                    case FriendshipStatus.RequestReceived:
+                        if (this._userData.friend_status == 1)
+                        {
+                            if (this._userData.Id != AppGlobalStateManager.Current.LoggedInUserId)
+                            {
+                                MenuItem menuItem3 = new MenuItem();
+                                string lowerInvariant = CommonResources.Profile_AddToFriends.ToLowerInvariant();
+                                menuItem3.Header = lowerInvariant;
+                                MenuItem menuItem4 = menuItem3;
+                                menuItem4.Click += delegate(object sender, RoutedEventArgs args)
+                                {
+                                    this.Add();
+                                };
+                                menuItemList.Add(menuItem4);
+                                break;
+                            }
+                            break;
+                        }
+                        MenuItem menuItem5 = new MenuItem();
+                        string profileAcceptRequest = CommonResources.Profile_AcceptRequest;
+                        menuItem5.Header = profileAcceptRequest;
+                        MenuItem menuItem6 = menuItem5;
+                        menuItem6.Click += delegate(object sender, RoutedEventArgs args)
+                        {
+                            this.Add();
+                        };
+                        MenuItem menuItem7 = new MenuItem();
+                        string profileKeepAsFollower = CommonResources.Profile_KeepAsFollower;
+                        menuItem7.Header = profileKeepAsFollower;
+                        MenuItem menuItem8 = menuItem7;
+                        menuItem8.Click += delegate(object sender, RoutedEventArgs args)
+                        {
+                            this.Remove();
+                        };
+                        menuItemList.Add(menuItem6);
+                        menuItemList.Add(menuItem8);
+                        break;
+
+
+
+
+
+
+
                     case FriendshipStatus.Friends:
                         MenuItem menuItem9 = new MenuItem();
                         string lowerInvariant1 = CommonResources.Profile_RemoveFromFriends.ToLowerInvariant();

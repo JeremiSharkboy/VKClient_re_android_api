@@ -35,26 +35,13 @@ namespace VKClient.Common.Backend.DataObjects
         private string _last_name_acc;
         private string _bdate;
         private BirthDate _birthDate;
-        private string _photo_rec;
+        //private string _photo_rec;
         private string _photo_max;
         private string _facebookName;
         private string _twitter;
         private string _instagram;
 
-        /*
-         * {"id":375988312,
-         * "first_name":"Тест",
-         * "last_name":"Тестович",
-         * "sex":2,
-         * "bdate":"1.1.2002",
-         * "photo_50":"https:\/\/vk.com\/images\/camera_50.png",
-         * "photo_100":"https:\/\/vk.com\/images\/camera_100.png",
-         * "status":"",
-         * "verified":0,
-         * "first_name_gen":"Теста",
-         * "last_name_gen":"Тестовича"},
         
-         * */
         public long id { get; set; }
 
         public string first_name
@@ -796,5 +783,9 @@ namespace VKClient.Common.Backend.DataObjects
         {
             return string.Format("{0} {1} {2} {3}", this.uid, this.first_name, this.last_name, this.online);
         }
+
+        //
+        public VKList<GiftItemData> gifts { get; set; }
+        public VKList<Photo> photos { get; set; }
     }
 }

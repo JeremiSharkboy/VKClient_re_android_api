@@ -125,76 +125,7 @@ namespace VKClient.Common.Backend
             parameters["code"] = code;
             VKRequestsDispatcher.DispatchRequestToVK<T>("execute", parameters, callback, customDesFunc, lowPriority, pageDataRequest, cancellationToken, null);
         }
-        ////////
-
-        public static void DispatchRequestToVK2(string methodName, Dictionary<string, string> parameters)
-        {
-            VKRequestsDispatcher.DoDispatch2(string.Format(VKRequestsDispatcher.RequestUriFrm, methodName), methodName, parameters);
-        }
-
-        public static void DoDispatch2(string baseUrl, string methodName, Dictionary<string, string> parameters)
-        {
-            //VKRequestsDispatcher._autorizationData = new AutorizationData();
-            //VKRequestsDispatcher._autorizationData.secret = "7c97a31652bb288aa9";
-            //VKRequestsDispatcher._autorizationData.access_token = "1df0ba4d5eefa0e1e35d916cc12c657b168e6b9599128a62da2f2cf0f8c101aa82dadaed675cbd0fd40b3";
-
-
-            parameters["v"] = VKConstants.API_VERSION;
-            VKRequestsDispatcher.AddLangParameter(parameters);
-            parameters["https"] = "1";
-
-            if (!string.IsNullOrEmpty(VKRequestsDispatcher._autorizationData != null ? VKRequestsDispatcher._autorizationData.access_token : null))
-                parameters["access_token"] = VKRequestsDispatcher._autorizationData.access_token;
-
-
-            if (!string.IsNullOrEmpty(VKRequestsDispatcher._autorizationData != null ? VKRequestsDispatcher._autorizationData.secret : null))
-            {
-                if (parameters.ContainsKey("sig"))
-                    parameters.Remove("sig");
-                string str1 = JsonWebRequest.ConvertDictionaryToQueryString(parameters, false);
-                if (str1 != string.Empty)
-                    str1 = "?" + str1;
-                string str2 = VKRequestsDispatcher.HashString("/method/" + methodName + str1 + VKRequestsDispatcher._autorizationData.secret);
-                parameters["sig"] = str2.ToLower();
-            }
-            JsonWebRequest.SendHTTPRequestAsync(/*!VKRequestsDispatcher.USE_HTTP ?*/ "https://" + baseUrl/* : "http://" + baseUrl*/, parameters, (Action<JsonResponseData>)(jsonResp =>
-            {
-                if (jsonResp.IsSucceeded)
-                {
-                    System.Diagnostics.Debug.WriteLine(jsonResp.JsonString);
-                    /*
-                    BackendResult<R, ResultCode> backendResult = new BackendResult<R, ResultCode>(ResultCode.CommunicationFailed);
-                    if (backendResult.ResultCode == ResultCode.ConfirmationRequired)
-                    {
-                        if (!VKRequestsDispatcher.GetIsResponseCancelled(cancellationToken))
-                        {
-                            Action action = confirmationRequiredHandler;
-                            if (action != null)
-                                action();
-                            IBackendConfirmationHandler confirmationHandler = ServiceLocator.Resolve<IBackendConfirmationHandler>();
-                            if (confirmationHandler != null)
-                            {
-                                confirmationHandler.Confirm(resultFromJson.confirmation_text, (Action<bool>)(confirmed =>
-                                {
-                                    if (confirmed)
-                                    {
-                                        parameters["confirm"] = "1";
-                                        VKRequestsDispatcher.DoDispatch<R>(baseUrl, methodName, parameters, callback, customDeserializationFunc, lowPriority, pageDataRequest, cancellationToken, null);
-                                    }
-                                    else
-                                        VKRequestsDispatcher.InvokeCallback((Action)(() => callback(new BackendResult<R, ResultCode>(ResultCode.ConfirmationCancelled))), cancellationToken);
-                                }));
-                            }
-                        }
-                    }*/
-                }
-                int i = 0;
-            }));
-        }
-
-
-
-        //////////
+        
         public static void DispatchRequestToVK<R>(string methodName, Dictionary<string, string> parameters, Action<BackendResult<R, ResultCode>> callback, Func<string, R> customDeserializationFunc = null, bool lowPriority = false, bool pageDataRequest = true, CancellationToken? cancellationToken = null, Action confirmationRequiredHandler = null)
         {
             VKRequestsDispatcher.DoDispatch<R>(string.Format(VKRequestsDispatcher.RequestUriFrm, methodName), methodName, parameters, callback, customDeserializationFunc, lowPriority, pageDataRequest, cancellationToken, confirmationRequiredHandler);
@@ -348,22 +279,6 @@ namespace VKClient.Common.Backend
                     }
                     else if (backendResult.ResultCode == ResultCode.TokenConfirmationRequired)
                     {
-                        /*
-                        Action<BackendResult<AutorizationData, ResultCode>> action = (Action<BackendResult<AutorizationData, ResultCode>>)(tt =>
-                        {
-                            if (tt.ResultCode == ResultCode.Succeeded)
-                            {
-                                VKRequestsDispatcher.DoDispatch<R>(baseUrl, methodName, parameters, callback, customDeserializationFunc, lowPriority, pageDataRequest, cancellationToken, null);
-                            }
-                        });
-                        Dictionary<string, string> parameters2 = new Dictionary<string, string>();
-                        parameters2["receipt"] = "fNVR-A-6qDY:APA91bH83Yy6pNAQw9Dqdo_uhyscoBSv9jmzvYA6pke0U1VaukpzGO0kCvJrVoIMlyD3pH492U39GPRBYKCpeugrdbcBfKHhU88PG5tXM0mVBTS7sTPVgA9ymbEkuMdwlC6-6oxxgtzJ";
-
-                        VKRequestsDispatcher.DispatchRequestToVK<AutorizationData>("auth.refreshToken", parameters2, action, new Func<string, AutorizationData>((s) => {
-                            s = s.Replace("token", "access_token");
-                            AutorizationData aa = JsonConvert.DeserializeObject<AutorizationData>(s);
-                            return aa;
-                        }));*/
                         VKRequestsDispatcher.RefreshToken((a) =>
                         {
                             VKRequestsDispatcher.DoDispatch<R>(baseUrl, methodName, parameters, callback, customDeserializationFunc, lowPriority, pageDataRequest, cancellationToken, null);

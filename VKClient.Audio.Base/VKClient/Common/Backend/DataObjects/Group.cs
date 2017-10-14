@@ -581,7 +581,7 @@ namespace VKClient.Common.Backend.DataObjects
 
         public List<Video> videos { get; set; }
 
-        public List<Product> products { get; set; }
+        public VKList<Product> goods { get; set; }//public List<Product> products { get; set; }
 
         public bool ShowAllPostsByDefault
         {

@@ -25,7 +25,7 @@ namespace VKClient.Audio.Base.DataObjects
 
         List<Video> videos { get; }
 
-        List<Product> products { get; }
+        VKList<Product> goods { get; }//List<Product> products { get; }
 
         bool isMarketMainAlbumEmpty { get; }
 

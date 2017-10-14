@@ -592,7 +592,7 @@ namespace VKClient.Common.Emoji
         {
             private static int? _systemMajorVersion;
 
-            public bool IsAvailable { get; set; }// = true;
+            public bool IsAvailable { get; set; }
 
             public string Symbol { get; set; }
 
@@ -608,8 +608,7 @@ namespace VKClient.Common.Emoji
                     return;
                 int? systemMajorVersion = Smiles.SmileInformation._systemMajorVersion;
                 int? nullable = systemMajorVersion.HasValue ? systemMajorVersion : (Smiles.SmileInformation._systemMajorVersion = new int?(Environment.OSVersion.Version.Major));
-                int num = 10;
-                if ((nullable.GetValueOrDefault() < num ? (nullable.HasValue ? 1 : 0) : 0) == 0)
+                if ((nullable.GetValueOrDefault() < 10 ? (nullable.HasValue ? true : false) : false) == false)
                     return;
                 this.IsAvailable = false;
             }
