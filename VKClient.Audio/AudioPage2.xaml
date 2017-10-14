@@ -1,0 +1,154 @@
+﻿<framework:PageBase
+    x:Class="VKClient.Audio.AudioPage2"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait" Orientation="Portrait"
+    xmlns:framework="clr-namespace:VKClient.Common.Framework;assembly=VKClient.Common"
+    xmlns:commonUC="clr-namespace:VKClient.Common.UC;assembly=VKClient.Common"
+    xmlns:controls="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls"
+    xmlns:localization="clr-namespace:VKClient.Audio.Localization"
+    xmlns:uc="clr-namespace:VKClient.Common.UC;assembly=VKClient.Common"
+    mc:Ignorable="d"
+    shell:SystemTray.IsVisible="True"
+    
+    xmlns:data="clr-namespace:VKClient.Audio.ViewModels"
+    d:DataContext="{Binding , Source={d:DesignData Source=/ViewModels/dump_audio.xaml, Type=data:AudioPageViewModel}}">
+
+    <framework:PageBase.Resources>
+        <localization:AudioLocalizedStrings x:Key="LocalizedStrings" />
+
+        <DataTemplate x:Key="TrackTemplate">
+            <Grid Margin="8 10" framework:MetroInMotion.Tilt="2.5" Tag="{Binding id}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="56"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+
+                <Grid Width="56" Height="56" Grid.Column="0" Grid.RowSpan="2" Margin="0 0 10 0">
+                    <Border
+                    Width="28"
+                    Height="28"
+                    Background="{Binding SubtitleBrush}" >
+                        <Border.OpacityMask>
+                            <ImageBrush framework:ImageLoader.ImageBrushMultiResSource="/Resources/MainMenu/Audios32px.png" />
+                        </Border.OpacityMask>
+                    </Border>
+                    <Image Width="56" Height="56" Source="{Binding album.thumb.photo_68}"/>
+                </Grid>
+
+                <TextBlock Text="{Binding title, FallbackValue=Title}" 
+                               Grid.Column="1"
+                               FontSize="25"
+                               Foreground="{Binding TitleBrush}"/>
+                <TextBlock Text="{Binding artist, FallbackValue=Artist}"
+                               Grid.Column="1" Grid.Row="1"
+                               Foreground="{Binding SubtitleBrush}"/>
+
+
+
+
+            </Grid>
+        </DataTemplate>
+
+        <DataTemplate x:Key="PlaylistTemplate">
+            <StackPanel Margin="10" Width="150">
+                <Image Height="150" Width="150" Source="/Resources/Mod/placeholder_playlist.9.png"/>
+                <TextBlock Text="{Binding title}" TextWrapping="NoWrap"/>
+                <TextBlock Text="{Binding description}" TextWrapping="NoWrap"/>
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate x:Key="CatalogTemplate">
+            <StackPanel>
+                <Grid Margin="0 20">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0" Text="{Binding title}" Margin="20 0" FontWeight="SemiBold"/>
+                    <TextBlock Grid.Column="1" Text="Show all" HorizontalAlignment="Right" Margin="20 0" FontWeight="SemiBold"/>
+
+                </Grid>
+                <ListBox MaxHeight="300" ItemsSource="{Binding audios}" ItemTemplate="{StaticResource TrackTemplate}">
+
+                </ListBox>
+            </StackPanel>
+        </DataTemplate>
+    </framework:PageBase.Resources>
+
+    <Grid>
+        <commonUC:GenericHeaderUC Height="138" x:Name="ucHeader" />
+
+        <controls:Pivot x:Name="mainPivot"
+                        Margin="0 67 0 0"
+                        Foreground="White" 
+                        Grid.Row="1"
+                        Style="{StaticResource PivotStyleNoHeader}"
+                        SelectionChanged="mainPivot_SelectionChanged">
+            <controls:PivotItem Name="pivotItemAudio" DataContext="{Binding }">
+
+                <controls:PivotItem.Header>
+                    <TextBlock FontSize="46" Text="{Binding Path=LocalizedResources.MainPivot_All,  Source={StaticResource LocalizedStrings}}"/>
+                </controls:PivotItem.Header>
+
+
+                <framework:ExtendedLongListSelector Name="allTracks"
+                                        ItemsSource="{Binding audios.items}"
+                                        IsFlatList="True"
+                                        ItemTemplate="{StaticResource TrackTemplate}"
+                                                    SelectionChanged="allTracks_SelectionChanged"
+                                        >
+                    <framework:ExtendedLongListSelector.ListHeader>
+                        <StackPanel>
+                            <TextBlock Text="Плейлисты" Margin="10" FontWeight="SemiBold"/>
+                            <ScrollViewer VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Hidden">
+                                <ItemsControl
+                              ItemsSource="{Binding playlists.items}"
+                              ItemTemplate="{StaticResource PlaylistTemplate}">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <StackPanel Orientation="Horizontal" />
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                </ItemsControl>
+                            </ScrollViewer>
+                            <Rectangle Fill="{StaticResource PhoneNewsDividerBrush}" Height="16" />
+                        </StackPanel>
+                    </framework:ExtendedLongListSelector.ListHeader>
+                </framework:ExtendedLongListSelector>
+            </controls:PivotItem>
+
+
+            <controls:PivotItem Name="pivotItemAlbums" >
+                <controls:PivotItem.Header>
+                    <TextBlock FontSize="46" Text="{Binding Path=LocalizedResources.Recommended,  Source={StaticResource LocalizedStrings}}"/>
+                </controls:PivotItem.Header>
+
+                <framework:ExtendedLongListSelector
+                                        ItemsSource="{Binding Catalog.items}"
+                                        IsFlatList="True"
+                                        ItemTemplate="{StaticResource CatalogTemplate}"
+                                        >
+                </framework:ExtendedLongListSelector>
+
+            </controls:PivotItem>
+
+        </controls:Pivot>
+
+        <commonUC:PullToRefreshUC x:Name="ucPullToRefresh"/>
+    </Grid>
+
+</framework:PageBase>
