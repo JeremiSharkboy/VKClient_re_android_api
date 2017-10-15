@@ -111,10 +111,10 @@
 
                     <!--<uc:MenuItemUC DataContext="{Binding SearchItem}"
                                    ItemTap="Search_OnClicked" />-->
-                    
+
                     <uc:MenuItemUC DataContext="{Binding SettingsItem}"
                                    ItemTap="Settings_OnClicked"
-                                   ItemHold="Settings_OnHolding" />                    
+                                   ItemHold="Settings_OnHolding" />
                 </StackPanel>
 
                 <uc:BirthdaysUC DataContext="{Binding BirthdaysVM}"

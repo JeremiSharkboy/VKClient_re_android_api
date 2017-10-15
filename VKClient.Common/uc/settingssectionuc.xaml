@@ -1,31 +1,47 @@
-﻿<UserControl 
+﻿<UserControl
     x:Class="VKClient.Common.UC.SettingsSectionUC"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:framework="clr-namespace:VKClient.Common.Framework"
-    mc:Ignorable="d"
-    
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
-    Foreground="{StaticResource PhoneForegroundBrush}">
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    mc:Ignorable="d">
 
-    <Grid Background="Transparent"
-          framework:MetroInMotion.Tilt="2.5"
-          Height="64"
-          Width="480">
-        <Border Background="{StaticResource PhoneSettingsIconBrush}"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Center"
-                Name="iconBorder"
-                Margin="16,0,0,0"
-                Height="32"
-                Width="32"/>
-        <TextBlock Name="titleBlock"
-                   Foreground="{StaticResource PhoneContrastTitleBrush}"
-                   FontSize="25.333"
-                   Margin="72,13,0,0"/>
+    <Grid
+        Width="480"
+        Height="64"
+        framework:MetroInMotion.Tilt="2.5"
+        Background="Transparent">
+        <TextBlock
+            Name="iconBorder"
+            Width="32"
+            Height="32"
+            Margin="16,0,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Center"
+            FontFamily="{StaticResource IconsFont}"
+            FontSize="32"
+            Foreground="{StaticResource PhoneSettingsIconBrush}"
+            Text="" />
+        <!--
+            Border
+            Background="{StaticResource PhoneSettingsIconBrush}"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Center"
+            Name="iconBorder"
+            Margin="16,0,0,0"
+            Height="32"
+            Width="32"/
+        -->
+        <TextBlock
+            Name="titleBlock"
+            Margin="72,13,0,0"
+            FontSize="25.333"
+            Foreground="{StaticResource PhoneContrastTitleBrush}"
+            Text="SETTING_TITLE" />
     </Grid>
 
 </UserControl>

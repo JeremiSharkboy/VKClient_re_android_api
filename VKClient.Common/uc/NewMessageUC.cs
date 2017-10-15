@@ -499,9 +499,12 @@ namespace VKClient.Common.UC
 
         private void OpenPanel()
         {
+
             this.panelControl.IsOpen = true;
             this.Focus();
             this.MarkUpdatesAsViewed(false);
+            this.ReloadStickersItems(true, true);
+
         }
 
         private void ReplyPanel_OnTap(object sender, System.Windows.Input.GestureEventArgs e)
@@ -665,6 +668,7 @@ namespace VKClient.Common.UC
             this.ucAudioRecorder = (AudioRecorderUC)base.FindName("ucAudioRecorder");
             this.ucStickersAutoSuggest = (StickersAutoSuggestUC)base.FindName("ucStickersAutoSuggest");
             this.panelControl = (TextBoxPanelControl)base.FindName("panelControl");
+
         }
     }
 }

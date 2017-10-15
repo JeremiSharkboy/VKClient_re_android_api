@@ -133,6 +133,7 @@
   <ItemGroup>
     <Content Include="AppIcon.png" />
     <Content Include="AppResLib.dll.0419.mui" />
+    <Resource Include="Font\segmdl2.ttf" />
     <None Include="microsoft.system.package.metadata\S-1-5-21-2702878673-795188819-444038987-2781.recovery" />
     <None Include="Properties\AppManifest.xml" />
     <None Include="Properties\WMAppManifest.xml">

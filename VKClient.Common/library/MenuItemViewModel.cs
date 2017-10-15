@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Windows;
@@ -43,8 +43,6 @@ namespace VKClient.Common.Library
                         return CommonResources.MainMenu_Bookmarks;
                     case MenuSectionName.Settings:
                         return CommonResources.MainMenu_Settings;
-                    case MenuSectionName.Search:
-                        return CommonResources.MainMenu_Search;
                     default:
                         return "";
                 }
@@ -53,9 +51,40 @@ namespace VKClient.Common.Library
 
         public string Icon
         {
+            //get
+            //{
+            //  return string.Format("../Resources/MainMenu/{0}32px.png", this._attachedSection.ToString("G"));
+            //}
             get
             {
-                return string.Format("../Resources/MainMenu/{0}32px.png", this._attachedSection.ToString("G"));
+                switch (_attachedSection)
+                {
+                    case MenuSectionName.News:
+                        return "";
+                    case MenuSectionName.Notifications:
+                        return "";
+                    //return "";
+                    case MenuSectionName.Messages:
+                        return "";
+                    case MenuSectionName.Friends:
+                        return "";
+                    case MenuSectionName.Communities:
+                        return "";
+                    case MenuSectionName.Photos:
+                        return "";
+                    case MenuSectionName.Videos:
+                        return "";
+                    case MenuSectionName.Audios:
+                        return "";
+                    case MenuSectionName.Games:
+                        return "";
+                    case MenuSectionName.Bookmarks:
+                        return "";
+                    case MenuSectionName.Settings:
+                        return "";
+                    default:
+                        return "";
+                }
             }
         }
 
@@ -134,8 +163,11 @@ namespace VKClient.Common.Library
 
         public void UpdateCount()
         {
+            // ISSUE: method reference
             this.NotifyPropertyChanged<int>(() => this.Count);
+            // ISSUE: method reference
             this.NotifyPropertyChanged<string>(() => this.CountString);
+            // ISSUE: method reference
             this.NotifyPropertyChanged<Visibility>(() => this.CountVisibility);
         }
 
