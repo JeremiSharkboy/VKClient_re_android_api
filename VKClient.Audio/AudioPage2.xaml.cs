@@ -36,6 +36,7 @@ namespace VKClient.Audio
             };
 
             this.ucHeader.Tap += ucHeader_Tap;
+            VisualStateManager.GoToState((Control)this, "Loaded", false);//скрываем загрузку
         }
 
         void ucHeader_Tap(object sender, System.Windows.Input.GestureEventArgs e)
@@ -50,44 +51,47 @@ namespace VKClient.Audio
             {
                 if (!this._catalog_loaded)
                 {
-                    (base.DataContext as AudioPageViewModel).RefreshRecomendationSection();
+                    LoadRecomendation();
                     _catalog_loaded = true;
                 }
-                /*
-                AudioPageViewModel m = this.DataContext as AudioPageViewModel;
-                AudioPageViewModel.CatalogViewModel.CatalogData c = new AudioPageViewModel.CatalogViewModel.CatalogData();
-                c.title = "TEST";
-
-                AudioPageViewModel.Audios.AudioData2 a = new AudioPageViewModel.Audios.AudioData2();
-                a.title = "tit";
-                a.artist = "artist";
-
-                c.audios.Add(a);
-                m.Catalog.items.Add(c);*/
-//                m.Notify();
             }
-            
-            
-            
-            //m.Catalog.items
-            /*
-            AudioPageViewModel.Playlists.PlaylistData d = new AudioPageViewModel.Playlists.PlaylistData();
-            d.id = 444;
-            d.title = "LOL";
-            d.description = "Testtttdsfsdfsdf";
-            m.playlists.items.Add(d);*/
-            /*
-            AudioPageViewModel.Audios.AudioData a = new AudioPageViewModel.Audios.AudioData();
-            a.title = "sdsdsd";
-            m.audios.items.Add(a);*/
+        }
+
+        private void LoadRecomendation()
+        {
+            VisualStateManager.GoToState((Control)this, "Loading", false);
+            (base.DataContext as AudioPageViewModel).RefreshRecomendationSection((b) =>
+            {
+                Execute.ExecuteOnUIThread(delegate
+                {
+                    VisualStateManager.GoToState((Control)this, b == true ? "Loaded" : "LoadingFailed", false);
+                });
+                
+            });
         }
 
         private void Initialize()
         {
+            //
+            //long _albumId = long.Parse(((Page)this).NavigationContext.QueryString["AlbumId"]);
+            //this._pageMode = (AudioPage.PageMode)int.Parse(((Page)this).NavigationContext.QueryString["PageMode"]);
+            //long exludeAlbumId = long.Parse(((Page)this).NavigationContext.QueryString["ExcludeAlbumId"]);
+            long owner_id = int.Parse(this.NavigationContext.QueryString["UserOrGroupId"]);
+            bool is_group = bool.Parse(this.NavigationContext.QueryString["IsGroup"]);
+            //
             this.DataContext = new AudioPageViewModel();
-            if(!(base.DataContext as AudioPageViewModel).LoadFromCache())
+
+            if (is_group)
             {
-                (base.DataContext as AudioPageViewModel).RefreshAudioSection();
+                this.pivotItemAlbums.Visibility = System.Windows.Visibility.Collapsed;
+                (base.DataContext as AudioPageViewModel).GetAudioByOwner(-owner_id);
+            }
+            else
+            {
+                 if(!(base.DataContext as AudioPageViewModel).LoadFromCache())
+                {
+                    (base.DataContext as AudioPageViewModel).RefreshAudioSection();
+                }
             }
         }
 
@@ -115,6 +119,11 @@ namespace VKClient.Audio
             longListSelector.SelectedItem = null;
         }
 
+        private void TryAgainButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            this.LoadRecomendation();
+        }
+
         private void TrackAction(AudioPageViewModel.Audios.AudioData2 item)
         {
             if (BGAudioPlayerWrapper.Instance.Track != null && item.UniqueId == BGAudioPlayerWrapper.Instance.Track.Tag)
@@ -133,7 +142,7 @@ namespace VKClient.Audio
                 BGAudioPlayerWrapper.Instance.Track = AudioTrackHelper.CreateTrack(a);
                 BGAudioPlayerWrapper.Instance.Play();
 
-
+                //todo:плейлист формировать из того списка, который открыт
 
 
 

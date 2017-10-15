@@ -64,7 +64,9 @@ namespace VKMessenger.Library
         private bool _changingNotifications;
         private bool _isMessageFromGroupBusy;
         private bool _isInProgressPinToStart;
-
+        //
+        public string RecordDurationStr { get { return ""; } }//bugfix?
+        //
         private int Skipped
         {
             get

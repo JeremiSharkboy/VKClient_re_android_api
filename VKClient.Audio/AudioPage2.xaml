@@ -18,6 +18,7 @@
     mc:Ignorable="d"
     shell:SystemTray.IsVisible="True"
     
+    xmlns:system="clr-namespace:System;assembly=mscorlib"
     xmlns:data="clr-namespace:VKClient.Audio.ViewModels"
     d:DataContext="{Binding , Source={d:DesignData Source=/ViewModels/dump_audio.xaml, Type=data:AudioPageViewModel}}">
 
@@ -64,7 +65,10 @@
 
         <DataTemplate x:Key="PlaylistTemplate">
             <StackPanel Margin="10" Width="150">
-                <Image Height="150" Width="150" Source="/Resources/Mod/placeholder_playlist.9.png"/>
+                <Grid>
+                    <Image Height="150" Width="150" Source="/Resources/Mod/placeholder_playlist.9.png"/>
+                    <Image Height="150" Width="150" Source="{Binding photo.photo_270}"/>
+                    </Grid>
                 <TextBlock Text="{Binding title}" TextWrapping="NoWrap"/>
                 <TextBlock Text="{Binding description}" TextWrapping="NoWrap"/>
             </StackPanel>
@@ -90,8 +94,151 @@
     </framework:PageBase.Resources>
 
     <Grid>
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="Common">
+                <VisualState x:Name="Loading" />
+                <VisualState x:Name="Reloading">
+                    <Storyboard>
+                        <Storyboard>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="stackPanelNotLoaded"
+                                                           Storyboard.TargetProperty="Visibility">
+                                <DiscreteObjectKeyFrame KeyTime="0"
+                                                        Value="Collapsed" />
+                            </ObjectAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </Storyboard>
+                </VisualState>
+                <VisualState x:Name="Blocked">
+                    <Storyboard>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="progressRing"
+                                                       Storyboard.TargetProperty="Visibility">
+                            <DiscreteObjectKeyFrame KeyTime="0"
+                                                    Value="Collapsed" />
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="progressRing"
+                                                       Storyboard.TargetProperty="IsActive">
+                            <DiscreteObjectKeyFrame KeyTime="0">
+                                <DiscreteObjectKeyFrame.Value>
+                                    <system:Boolean>False</system:Boolean>
+                                </DiscreteObjectKeyFrame.Value>
+                            </DiscreteObjectKeyFrame>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="textBlockLoadingStatus"
+                                                       Storyboard.TargetProperty="TextAlignment">
+                            <DiscreteObjectKeyFrame KeyTime="0"
+                                                    Value="Left" />
+                        </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                </VisualState>
+                <VisualState x:Name="Private">
+                    <Storyboard>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="progressRing"
+                                                       Storyboard.TargetProperty="Visibility">
+                            <DiscreteObjectKeyFrame KeyTime="0"
+                                                    Value="Collapsed" />
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="progressRing"
+                                                       Storyboard.TargetProperty="IsActive">
+                            <DiscreteObjectKeyFrame KeyTime="0">
+                                <DiscreteObjectKeyFrame.Value>
+                                    <system:Boolean>False</system:Boolean>
+                                </DiscreteObjectKeyFrame.Value>
+                            </DiscreteObjectKeyFrame>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="textBlockLoadingStatus"
+                                                       Storyboard.TargetProperty="TextAlignment">
+                            <DiscreteObjectKeyFrame KeyTime="0"
+                                                    Value="Left" />
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="gridHeader"
+                                                       Storyboard.TargetProperty="Visibility">
+                            <DiscreteObjectKeyFrame KeyTime="0"
+                                                    Value="Collapsed" />
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="borderHeaderPlaceholder"
+                                                       Storyboard.TargetProperty="Visibility">
+                            <DiscreteObjectKeyFrame KeyTime="0"
+                                                    Value="Visible" />
+                        </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                </VisualState>
+                <VisualState x:Name="LoadingFailed">
+                    <Storyboard>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="progressRing"
+                                                       Storyboard.TargetProperty="Visibility">
+                            <DiscreteObjectKeyFrame KeyTime="0"
+                                                    Value="Collapsed" />
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="progressRing"
+                                                       Storyboard.TargetProperty="IsActive">
+                            <DiscreteObjectKeyFrame KeyTime="0">
+                                <DiscreteObjectKeyFrame.Value>
+                                    <system:Boolean>False</system:Boolean>
+                                </DiscreteObjectKeyFrame.Value>
+                            </DiscreteObjectKeyFrame>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="textBlockLoadingStatus"
+                                                       Storyboard.TargetProperty="TextAlignment">
+                            <DiscreteObjectKeyFrame KeyTime="0"
+                                                    Value="Left" />
+                        </ObjectAnimationUsingKeyFrames>
+
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="buttonTryAgain"
+                                                       Storyboard.TargetProperty="Visibility">
+                            <DiscreteObjectKeyFrame KeyTime="0"
+                                                    Value="Visible" />
+                        </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                </VisualState>
+                <VisualState x:Name="Loaded">
+                    <Storyboard>
+                        <Storyboard>
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="stackPanelNotLoaded"
+                                                           Storyboard.TargetProperty="Visibility">
+                                <DiscreteObjectKeyFrame KeyTime="0"
+                                                        Value="Collapsed" />
+                            </ObjectAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </Storyboard>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+        
+        
         <commonUC:GenericHeaderUC Height="138" x:Name="ucHeader" />
 
+
+        <StackPanel x:Name="stackPanelNotLoaded" VerticalAlignment="Center">
+                <uc:ProgressRing x:Name="progressRing" Height="56"
+                                                     Width="56"
+                                                     IsActive="True"
+                                                     Foreground="{StaticResource PhoneProgressBarForegroundBrush}"
+                                                     Margin="0 56 0 -8" />
+
+            <!--<TextBlock x:Name="textBlockLoadingStatus"
+                                               Foreground="{StaticResource PhoneProfileInfoLoadingForegroundBrush}"
+                                               Margin="16 32 16 24"
+                                               TextWrapping="Wrap"
+                                               TextAlignment="Center"
+                                               Text="Loading..."
+                                               FontSize="22.67"
+                                               FontFamily="{StaticResource PhoneFontFamilySemiLight}" />-->
+
+            
+
+            <Button x:Name="buttonTryAgain"
+                                            Visibility="Collapsed"
+                                            Style="{StaticResource VKButtonSecondaryStyle}"
+                                            HorizontalAlignment="Left"
+                                            Width="200"
+                                            Margin="4 -12 4 4"
+                                            Content="{Binding LocalizedResources.TryAgain, Source={StaticResource LocalizedStrings}}"
+                                            Click="TryAgainButton_OnClick" />
+        </StackPanel>
+        
+        
+        
+        
         <controls:Pivot x:Name="mainPivot"
                         Margin="0 67 0 0"
                         Foreground="White" 

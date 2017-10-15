@@ -52,7 +52,7 @@ namespace VKClient.Common.Profiles.Shared.ViewModels
         public void Init(IProfileData profileData, ProfileMainSectionType mainSectionType)
         {
             this._profileData = profileData;
-            this._isGroup = this._profileData is GroupData;
+            this._isGroup = this._profileData is Group;
             this._mainSectionType = mainSectionType;
             List<MediaListSectionViewModel> mediaItems = this.CreateMediaItems();
             if (ProfileMediaSectionsViewModel.AreItemsEqual((IList<MediaListSectionViewModel>)mediaItems, (IList<MediaListSectionViewModel>)this._items))

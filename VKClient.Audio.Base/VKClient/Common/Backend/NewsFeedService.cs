@@ -163,7 +163,7 @@ paramDict["connection_subtype"] = connectionType.Subtype;
                 case -101://новости фотографий(-4 андроид)
                     paramDict["return_banned"] = "1";
                     break;
-                case -1://(-1 андроид)
+                case -9://(-1 андроид)
                     paramDict["feed_type"] = "recommended";
                     break;
             }
@@ -203,8 +203,10 @@ paramDict["connection_subtype"] = connectionType.Subtype;
             NewsFeedType? feedType = parameters.FeedType;
             if (feedType.HasValue)
             {
-                paramDict["feed_type"] = feedType.Value.ToString();
+                //paramDict["feed_type"] = feedType.Value.ToString();
+                paramDict["forced_feed_type"] = feedType.Value.ToString();//только в разделах Ќовости и —начала интересные новости
             }
+            
             /*
               if (list == 0 && isSmartNews != null)
               {
@@ -245,7 +247,7 @@ paramDict["connection_subtype"] = connectionType.Subtype;
                   param("last_request_notification_sec", (int)((System.currentTimeMillis() / 1000) - ((long)last)));
               }*/
             //
-            paramDict["forced_feed_type"] = parameters.count>0 ? "top" : "recent";
+            
             if (parameters.UpdatePosition > -1)
                 paramDict["update_position"] = parameters.UpdatePosition.ToString();
             if (!string.IsNullOrEmpty(parameters.UpdatePost))
@@ -256,7 +258,7 @@ paramDict["connection_subtype"] = connectionType.Subtype;
             //paramDict["is_not_newsfeed"] = "1";//при единице истории не груз€тс€
             paramDict["photo_sizes"] = "1";
             paramDict["last_request_notification_sec"] = "3";
-            paramDict["device_info"] = "{\"app_version\":\"4.13.1\",\"system_name\":\"Android\",\"system_version\":\"6.0\",\"manufacturer\":\"Fly\",\"device_model\":\"FS407\",\"ads_device_id\":\"d30bbfeb-0fd9-4e6c-96ef-7229b5424937\",\"ads_tracking_disabled\":1,\"ads_android_id\":\"3da1047301b670fc\"}";
+            paramDict["device_info"] = new AdvertisingDeviceInfo().ToJsonString();
             paramDict["app_package_id"] = "com.vkontakte.android";
             NewsFeedService.DoLoadNewsFeed("execute.getNewsfeedSmart", paramDict, callback);
         }

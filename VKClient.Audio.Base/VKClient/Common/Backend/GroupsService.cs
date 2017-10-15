@@ -165,7 +165,7 @@ namespace VKClient.Common.Backend
 
             VKRequestsDispatcher.DispatchRequestToVK<Group>("execute.getFullGroupNewNew", parameters, callback, (Func<string, Group>)(jsonStr =>
           {
-              
+
               jsonStr = VKRequestsDispatcher.FixArrayToObject(jsonStr, "counters");
               jsonStr = VKRequestsDispatcher.FixArrayToObject(jsonStr, "photos"); //jsonStr = VKRequestsDispatcher.FixFalseArray(jsonStr, "photos", true);
               jsonStr = VKRequestsDispatcher.FixArrayToObject(jsonStr, "mediaSectionsSettings");
@@ -177,29 +177,19 @@ namespace VKClient.Common.Backend
               string str2 = m.Groups[2].Value;
               jsonStr = jsonStr.Replace(str1, "\"status\":\"" + str2 + "\"");
 
+              jsonStr = VKRequestsDispatcher.FixArrayToObject(jsonStr, "goods");
+
               Group response = JsonConvert.DeserializeObject<VKRequestsDispatcher.GenericRoot<Group>>(jsonStr).response;
+
+
               
 
 
 
+              GroupMembershipType groupMembershipType = (GroupMembershipType)response.member_status;
+              if (groupMembershipType == GroupMembershipType.InvitationRejected)
+                  groupMembershipType = GroupMembershipType.NotAMember;
 
-
-              GroupMembershipType groupMembershipType = GroupMembershipType.NotAMember;
-              //try
-             // {
-                  groupMembershipType = (GroupMembershipType)response.member_status;
-                  if (groupMembershipType == GroupMembershipType.InvitationRejected)
-                      groupMembershipType = GroupMembershipType.NotAMember;
-             // }
-              //catch
-              //{
-              //    if (response.membership.member == 1)
-              //        groupMembershipType = GroupMembershipType.Member;
-              //    if (response.membership.invitation == 1)
-              //        groupMembershipType = GroupMembershipType.InvitationReceived;
-              //    if (response.membership.request == 1)
-              //        groupMembershipType = GroupMembershipType.RequestSent;
-              //}
               response.MembershipType = groupMembershipType;
               if (Enum.IsDefined(typeof(ProfileMainSectionType), response.main_section))
                   response.MainSection = (ProfileMainSectionType)response.main_section;

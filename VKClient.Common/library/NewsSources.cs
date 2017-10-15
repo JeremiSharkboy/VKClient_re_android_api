@@ -91,7 +91,7 @@ namespace VKClient.Common.Library
             {
                 foreach (NewsFeedLists newsFeedList in newsFeedListList)
                 {
-                    if (newsFeedList.is_unavailable)
+                    if (newsFeedList.is_unavailable || newsFeedList.is_hidden)
                     {
                         continue;
                     }

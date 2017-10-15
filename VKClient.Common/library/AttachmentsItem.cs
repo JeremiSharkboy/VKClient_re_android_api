@@ -43,6 +43,9 @@ namespace VKClient.Common.Library
         private readonly List<Attachment> _marketAlbumAttachments;
         private readonly List<Attachment> _audioAttachments;
         private readonly List<Attachment> _docImageAttachments;
+        //
+        private readonly List<Attachment> _audio_playlistAttachments;
+        //
         private readonly WallPost _wallAttachment;
         private readonly Comment _commentAttachment;
         private readonly Gift _giftAttachment;
@@ -111,152 +114,14 @@ namespace VKClient.Common.Library
             this._marketAlbumAttachments = new List<Attachment>();
             this._audioAttachments = new List<Attachment>();
             this._docImageAttachments = new List<Attachment>();
+            //
+            this._audio_playlistAttachments = new List<Attachment>();
+            //
             if (this._attachments != null)
             {
                 foreach (Attachment attachment in this._attachments)
                 {
                     string type = attachment.type;
-
-                    //uint stringHash = PrivateImplementationDetails.ComputeStringHash(type);
-                    /*
-                  if (stringHash <= 2322801903U)
-                  {
-                    if (stringHash <= 1665450665U)
-                    {
-                      if ((int) stringHash != 232457833)
-                      {
-                        if ((int) stringHash != 611394536)
-                        {
-                          if ((int) stringHash == 1665450665 && type == "market_album")
-                          {
-                            this._marketAlbumAttachments.Add(attachment);
-                            continue;
-                          }
-                          continue;
-                        }
-                        if (!(type == "wall_ads"))
-                          continue;
-                      }
-                      else
-                      {
-                        if (type == "link")
-                        {
-                          Link link = attachment.link;
-                          if ((link != null ? link.photo : (Photo) null) != null && link.photo.width > 0 && link.photo.height > 0)
-                          {
-                            this._link = link;
-                            continue;
-                          }
-                          continue;
-                        }
-                        continue;
-                      }
-                    }
-                    else
-                    {
-                      if (stringHash <= 1876330552U)
-                      {
-                        if ((int) stringHash != 1694181484)
-                        {
-                          if ((int) stringHash == 1876330552 && type == "poll")
-                          {
-                            this._poll = attachment.poll;
-                            continue;
-                          }
-                          continue;
-                        }
-                        if (type == "album")
-                        {
-                          this._albumAttachments.Add(attachment);
-                          continue;
-                        }
-                        continue;
-                      }
-                      if ((int) stringHash != -2128144669)
-                      {
-                        if ((int) stringHash == -1972165393 && type == "gift")
-                        {
-                          this._giftAttachment = attachment.gift;
-                          continue;
-                        }
-                        continue;
-                      }
-                      if (type == "photo")
-                      {
-                        this._photoAttachments.Add(attachment);
-                        continue;
-                      }
-                      continue;
-                    }
-                  }
-                  else if (stringHash <= 3343004700U)
-                  {
-                    if ((int) stringHash != -1490670315)
-                    {
-                      if ((int) stringHash != -1242026383)
-                      {
-                        if ((int) stringHash == -951962596 && type == "sticker")
-                        {
-                          this._sticker = attachment.sticker;
-                          continue;
-                        }
-                        continue;
-                      }
-                      if (type == "market")
-                      {
-                        this._product = attachment.market;
-                        continue;
-                      }
-                      continue;
-                    }
-                    if (!(type == "wall"))
-                      continue;
-                  }
-                  else
-                  {
-                    if (stringHash <= 3472427884U)
-                    {
-                      if ((int) stringHash != -896901342)
-                      {
-                        if ((int) stringHash == -822539412 && type == "video")
-                        {
-                          this._videoAttachments.Add(attachment);
-                          continue;
-                        }
-                        continue;
-                      }
-                      if (type == "wall_reply")
-                      {
-                        this._commentAttachment = attachment.wall_reply;
-                        continue;
-                      }
-                      continue;
-                    }
-                    if ((int) stringHash != -530499175)
-                    {
-                      if ((int) stringHash == -362233003 && type == "doc")
-                      {
-                        if (!attachment.doc.IsVideoGif)
-                        {
-                          if (new DocumentHeader(attachment.doc, 0, false).HasThumbnail)
-                          {
-                            this._docImageAttachments.Add(attachment);
-                            continue;
-                          }
-                          continue;
-                        }
-                        this._gifAttachments.Add(attachment);
-                        continue;
-                      }
-                      continue;
-                    }
-                    if (type == "audio")
-                    {
-                      this._audioAttachments.Add(attachment);
-                      continue;
-                    }
-                    continue;
-                  }*/
                     if (type == "money_transfer")
                     {
                         this._moneyTransfer = attachment.money_transfer;
@@ -356,6 +221,10 @@ namespace VKClient.Common.Library
                         this._audioAttachments.Add(attachment);
                         continue;
                     }
+                    else if (type == "audio_playlist")
+                    {
+                        this._audio_playlistAttachments.Add(attachment);
+                    }
                     else
                     {
                         System.Diagnostics.Debug.WriteLine("AttachmentsItem.AttachmentsItem " + type);
@@ -379,210 +248,7 @@ namespace VKClient.Common.Library
                 this.Width = horizontalWidth;
             this.CreateOrUpdateLayout();
         }
-        /*
-      public AttachmentsItem(double width, Thickness margin, List<Attachment> attachments, Geo geo, string itemId, bool friendsOnly = false, bool isCommentAttachments = false, bool isMessage = false, bool isHorizontal = false, double horizontalWidth = 0.0, bool rightAlign = false, bool wallPostWithCommentsPage = false, string hyperlinkId = "", string parentPostId = null, User parentDialogUser = null, bool isForwardedMessage = false)
-        : base(width, margin,  new Thickness())
-      {
-        this._hyperlinkId = hyperlinkId;
-        this._itemId = itemId;
-        this._attachments = attachments ?? new List<Attachment>();
-        this._gifAttachments = new List<Attachment>();
-        this._photoAttachments = new List<Attachment>();
-        this._videoAttachments = new List<Attachment>();
-        this._albumAttachments = new List<Attachment>();
-        this._marketAlbumAttachments = new List<Attachment>();
-        this._audioAttachments = new List<Attachment>();
-        this._docImageAttachments = new List<Attachment>();
-        if (this._attachments != null)
-        {
-          foreach (Attachment attachment in this._attachments)
-          {
-            string type = attachment.type;
-            // ISSUE: reference to a compiler-generated method
-            uint stringHash = <PrivateImplementationDetails>.ComputeStringHash(type);
-            if (stringHash <= 2166822627U)
-            {
-              if (stringHash <= 1367801971U)
-              {
-                if ((int) stringHash != 232457833)
-                {
-                  if ((int) stringHash != 611394536)
-                  {
-                    if ((int) stringHash == 1367801971 && type == "money_transfer")
-                    {
-                      this._moneyTransfer = attachment.money_transfer;
-                      continue;
-                    }
-                    continue;
-                  }
-                  if (!(type == "wall_ads"))
-                    continue;
-                }
-                else
-                {
-                  if (type == "link")
-                  {
-                    Link link = attachment.link;
-                    if ((link != null ? link.photo :  null) != null)
-                    {
-                      this._link = link;
-                      continue;
-                    }
-                    continue;
-                  }
-                  continue;
-                }
-              }
-              else
-              {
-                if (stringHash <= 1694181484U)
-                {
-                  if ((int) stringHash != 1665450665)
-                  {
-                    if ((int) stringHash == 1694181484 && type == "album")
-                    {
-                      this._albumAttachments.Add(attachment);
-                      continue;
-                    }
-                    continue;
-                  }
-                  if (type == "market_album")
-                  {
-                    this._marketAlbumAttachments.Add(attachment);
-                    continue;
-                  }
-                  continue;
-                }
-                if ((int) stringHash != 1876330552)
-                {
-                  if ((int) stringHash == -2128144669 && type == "photo")
-                  {
-                    this._photoAttachments.Add(attachment);
-                    continue;
-                  }
-                  continue;
-                }
-                if (type == "poll")
-                {
-                  this._poll = attachment.poll;
-                  continue;
-                }
-                continue;
-              }
-            }
-            else if (stringHash <= 3343004700U)
-            {
-              if (stringHash <= 2804296981U)
-              {
-                if ((int) stringHash != -1972165393)
-                {
-                  if ((int) stringHash != -1490670315 || !(type == "wall"))
-                    continue;
-                }
-                else
-                {
-                  if (type == "gift")
-                  {
-                    this._giftAttachment = attachment.gift;
-                    continue;
-                  }
-                  continue;
-                }
-              }
-              else
-              {
-                if ((int) stringHash != -1242026383)
-                {
-                  if ((int) stringHash == -951962596 && type == "sticker")
-                  {
-                    this._sticker = attachment.sticker;
-                    continue;
-                  }
-                  continue;
-                }
-                if (type == "market")
-                {
-                  this._product = attachment.market;
-                  continue;
-                }
-                continue;
-              }
-            }
-            else
-            {
-              if (stringHash <= 3472427884U)
-              {
-                if ((int) stringHash != -896901342)
-                {
-                  if ((int) stringHash == -822539412 && type == "video")
-                  {
-                    this._videoAttachments.Add(attachment);
-                    continue;
-                  }
-                  continue;
-                }
-                if (type == "wall_reply")
-                {
-                  this._commentAttachment = attachment.wall_reply;
-                  continue;
-                }
-                continue;
-              }
-              if ((int) stringHash != -530499175)
-              {
-                if ((int) stringHash == -362233003 && type == "doc")
-                {
-                  if (attachment.doc.IsGraffiti)
-                  {
-                    this._graffitiDoc = attachment.doc;
-                    continue;
-                  }
-                  if (attachment.doc.IsVoiceMessage)
-                  {
-                    this._voiceMessageDoc = attachment.doc;
-                    continue;
-                  }
-                  if (!attachment.doc.IsVideoGif)
-                  {
-                    if (new DocumentHeader(attachment.doc, 0, false, 0L).HasThumbnail)
-                    {
-                      this._docImageAttachments.Add(attachment);
-                      continue;
-                    }
-                    continue;
-                  }
-                  this._gifAttachments.Add(attachment);
-                  continue;
-                }
-                continue;
-              }
-              if (type == "audio")
-              {
-                this._audioAttachments.Add(attachment);
-                continue;
-              }
-              continue;
-            }
-            this._wallAttachment = attachment.wall;
-          }
-        }
-        this._geo = geo;
-        this._friendsOnly = friendsOnly;
-        this._isCommentAttachments = isCommentAttachments;
-        this._isMessage = isMessage;
-        this._isHorizontal = isHorizontal;
-        this._parentPostId = parentPostId;
-        this._parentDialogUser = parentDialogUser;
-        this._isForwardedMessage = isForwardedMessage;
-        this._horizontalWidth = horizontalWidth;
-        this._verticalWidth = width;
-        this._wallPostWithCommentsPage = wallPostWithCommentsPage;
-        this._rightAlign = rightAlign;
-        if (this._isHorizontal)
-          this.Width = horizontalWidth;
-        this.CreateOrUpdateLayout();
-      }
-        */
+        
         private void CreateOrUpdateLayout()
         {
             this.IsLastAttachmentMedia = false;

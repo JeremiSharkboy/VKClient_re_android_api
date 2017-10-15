@@ -69,8 +69,7 @@ namespace VKClient.Audio.ViewModels
                 }
             });
 
-            //VKRequestsDispatcher.RefreshToken((a) =>
-            //{
+           
                 Dictionary<string, string> parameters = new Dictionary<string, string>();
                 parameters["owner_id"] = AppGlobalStateManager.Current.LoggedInUserId.ToString();
                 parameters["need_owner"] = "1";
@@ -84,10 +83,38 @@ namespace VKClient.Audio.ViewModels
                         return JsonConvert.DeserializeObject<GenericRoot<AudioPageViewModel>>(jsonStr).response;
                     }),
                 false, true, new CancellationToken?(), null);
-            //});
+            
         }
 
-        public void RefreshRecomendationSection()
+        public void GetAudioByOwner(long owner_id)
+        {
+            Action<BackendResult<AudioPageViewModel, ResultCode>> callback = (Action<BackendResult<AudioPageViewModel, ResultCode>>)(tt =>
+            {
+                if (tt.ResultCode == ResultCode.Succeeded)
+                {
+                    this.audios = tt.ResultData.audios;
+                    this.playlists = tt.ResultData.playlists;
+                    base.NotifyPropertyChanged<Audios>(() => this.audios);
+                    base.NotifyPropertyChanged<Playlists>(() => this.playlists);
+                }
+            });
+
+            Dictionary<string, string> parameters = new Dictionary<string, string>();
+            parameters["owner_id"] = owner_id.ToString();
+            parameters["need_owner"] = "1";
+            parameters["need_playlists"] = "1";
+            parameters["playlists_count"] = "12";
+            parameters["audio_offset"] = "0";
+            parameters["audio_count"] = "100";
+            VKRequestsDispatcher.DispatchRequestToVK<AudioPageViewModel>("execute.getMusicPage", parameters, callback,
+                (Func<string, AudioPageViewModel>)(jsonStr =>
+                {
+                    return JsonConvert.DeserializeObject<GenericRoot<AudioPageViewModel>>(jsonStr).response;
+                }),
+            false, true, new CancellationToken?(), null);
+        }
+
+        public void RefreshRecomendationSection( Action<bool> call )
         {
             Action<BackendResult<CatalogViewModel, ResultCode>> callback = (Action<BackendResult<CatalogViewModel, ResultCode>>)(tt =>
             {
@@ -106,6 +133,9 @@ namespace VKClient.Audio.ViewModels
 
                     //CacheManager.TrySerialize(this, "AudioPageViewModel", false, CacheManager.DataType.CachedData);
                 }
+
+                if (call != null)
+                    call(tt.ResultCode == ResultCode.Succeeded);
             });
 
             //VKRequestsDispatcher.RefreshToken((a) =>
@@ -211,7 +241,7 @@ namespace VKClient.Audio.ViewModels
 
                 public AudioData2()
                 {
-                    EventAggregator.Current.Subscribe(this);
+                    EventAggregator.Current.Subscribe(this);//todo:жрёт сильно ресурсы
                 }
 
                 public AlbumData album { get; set; }
@@ -419,6 +449,7 @@ namespace VKClient.Audio.ViewModels
                 public int plays { get; set; }
                 public long create_time { get; set; }
                 public long update_time { get; set; }
+                public AudioPageViewModel.Audios.ThumbData photo { get; set; }
 
                 public void Write(BinaryWriter writer)
                 {
